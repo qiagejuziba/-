@@ -102,4 +102,18 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 启用禁用员工账号接口
+     * @param status
+     * @param id
+     * @return
+     */
+    @ApiOperation("启用禁用用户接口")
+    @PostMapping("status/{status}")
+    public Result startOrStop(@PathVariable Integer status,Long id){
+        log.info("启用禁用用户，参数为:{},{}",status,id);
+        employeeService.startOrStop(status,id);
+        return Result.success();
+    }
+
 }
