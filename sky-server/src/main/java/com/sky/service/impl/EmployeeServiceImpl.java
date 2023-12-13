@@ -85,12 +85,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         String md5Password = DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes());
         employee.setPassword(md5Password);
         //设置新增时间
-        employee.setCreateTime(LocalDateTime.now());
+        //employee.setCreateTime(LocalDateTime.now());
         //设置修改时间
-        employee.setUpdateTime(LocalDateTime.now());
-        // TODO 需要把新增人和修改人改为动态的，现在是写死的，需要根据管理用户来修改  2023年12月10日21:55:35
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //employee.setUpdateTime(LocalDateTime.now());
+        // 需要把新增人和修改人改为动态的，现在是写死的，需要根据管理用户来修改  2023年12月10日21:55:35
+        //employee.setCreateUser(BaseContext.getCurrentId());
+        //employee.setUpdateUser(BaseContext.getCurrentId());
 
         //调用mapper接口
         employeeMapper.insert(employee);
@@ -152,8 +152,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO,employee);
         //2.把部分属性补全
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //employee.setUpdateTime(LocalDateTime.now());
+        //mployee.setUpdateUser(BaseContext.getCurrentId());
 
         employeeMapper.update(employee);
 
