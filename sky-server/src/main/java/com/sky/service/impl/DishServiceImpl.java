@@ -101,12 +101,62 @@ public class DishServiceImpl implements DishService {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
         //删除菜品
-        for (Long id : ids) {
+    /*    for (Long id : ids) {
             dishMapper.deleteById(id);
             //删除菜品对应口味---不管有没有直接尝试删除就行
             dishFlavorMapper.deleteByDishId(id);
+        }*/
+
+        //根据菜品id集合删除菜品数据
+        dishMapper.delteByIds(ids);
+
+        //根据菜品id集合删除口味数据
+        dishFlavorMapper.deleteByDishIds(ids);
+
+
+    }
+
+    /**
+     * 根据id查询菜品
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVO getByIdWithFlavor(Long id) {
+        DishVO dishVO = new DishVO();
+        Dish dish = dishMapper.getById(id);
+        BeanUtils.copyProperties(dish,dishVO);
+        //查询对应口味
+        List<DishFlavor> flavors = dishFlavorMapper.getByDishId(id);
+        dishVO.setFlavors(flavors);
+        return dishVO;
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     */
+    @Override
+    @Transactional
+    public void updateDishWithFlavor(DishDTO dishDTO) {
+        //拷贝
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO,dish);
+        //修改菜品基本属性
+        dishMapper.update(dish);
+
+        //修改对应口味---思路，我们直接把原始口味删除，插入用户新增的口味
+        dishFlavorMapper.deleteByDishId(dish.getId());
+        //重新插入口味数据
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && flavors.size() > 0) {
+            //2.因为DishFlavor中有dishId，但是dishId只有插入以后才会有，所以我们需要利用主键回显，获取dishId
+            // 遍历集合，设置dishId
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishDTO.getId());
+            });
+            //2.2向口味表中插入n条数据
+            dishFlavorMapper.insertBatch(flavors);
         }
-
-
     }
 }
