@@ -11,3 +11,8 @@ sky:
     access-key-id: LTAI5tGzzZXBqKgX9icZiSzR
     access-key-secret: sbScjZLUGW11XoiVlrduNqqNNfKX9r
     bucket-name: sky-zhairuihao
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 10
