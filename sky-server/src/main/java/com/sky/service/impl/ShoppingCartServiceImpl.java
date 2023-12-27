@@ -41,7 +41,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
         Long userId = BaseContext.getCurrentId();
         shoppingCart.setUserId(userId);
-
+        //查询购物车数据
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
         //1.1如果存在，则直接number + 1.执行update操作。
         if (list != null && list.size() > 0) {
@@ -75,5 +75,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             //2.不同用户购物车不同，根据用户id查询购物车数据
         }
 
+    }
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    @Override
+    public List<ShoppingCart> show() {
+        //获取当前用户id
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(userId)
+                .build();
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        return list;
     }
 }
