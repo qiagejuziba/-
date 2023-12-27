@@ -54,10 +54,10 @@ public interface SetmealMapper {
     /**
      * 根据id删除套餐
      *
-     * @param setmealId
+     * @param id
      */
     @Delete("delete from setmeal where id = #{id}")
-    void deleteByIds(Long setmealId);
+    void deleteByIds(Long id);
 
     /**
      * 更新套餐信息
