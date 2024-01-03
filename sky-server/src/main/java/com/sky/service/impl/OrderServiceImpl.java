@@ -6,10 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersConfirmDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -375,7 +372,7 @@ public class OrderServiceImpl implements OrderService {
                 //获取地址
                 AddressBook addressBook = addressBookMapper.getById(orders.getAddressBookId());
                 orders.setAddress(addressBook.getProvinceName() + addressBook.getCityName()
-                        + addressBook.getDistrictName() + " " +"("+ addressBook.getDetail() + ")");
+                        + addressBook.getDistrictName() + " " + "(" + addressBook.getDetail() + ")");
                 //把共同字段拷贝到OrderVO
                 OrderVO orderVO = new OrderVO();
                 BeanUtils.copyProperties(orders, orderVO);
@@ -411,6 +408,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 商家统计各个状态订单数量
+     *
      * @return
      */
     @Override
@@ -432,6 +430,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 接单
+     *
      * @param ordersConfirmDTO
      */
     @Override
@@ -442,5 +441,50 @@ public class OrderServiceImpl implements OrderService {
                 .id(ordersConfirmDTO.getId())
                 .build();
         orderMapper.update(orders);
+    }
+
+    /**
+     * 拒单
+     *
+     * @param ordersRejectionDTO
+     */
+    @Override
+    public void rejection(OrdersRejectionDTO ordersRejectionDTO) {
+        //业务规则：
+        // - 商家拒单其实就是将订单状态修改为“已取消”
+        //- 只有订单处于“待接单”状态时可以执行拒单操作
+        //- 商家拒单时需要指定拒单原因
+        //- 商家拒单时，如果用户已经完成了支付，需要为用户退款
+
+        //判断订单是否处于待接单状态
+        Orders ordersDB = orderMapper.getById(ordersRejectionDTO.getId());
+        if (ordersDB == null || !ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            //订单为空或者状态不为“待接单”则抛出业务异常
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //支付状态
+        Integer payStatus = ordersDB.getPayStatus();
+        if (payStatus == Orders.PAID) {
+            //用户已支付，需要退款  ，
+           /* String refund = weChatPayUtil.refund(
+                    ordersDB.getNumber(),
+                    ordersDB.getNumber(),
+                    new BigDecimal(0.01),
+                    new BigDecimal(0.01));
+            log.info("申请退款：{}", refund);*/
+
+        }
+        //个人商户微信小程序无法使用支付功能，所以直接逻辑修改为退款
+        // 拒单需要退款，根据订单id更新订单状态、拒单原因、取消时间
+        Orders orders = new Orders();
+        orders.setId(ordersDB.getId());
+        orders.setPayStatus(Orders.REFUND);
+        orders.setRejectionReason(ordersRejectionDTO.getRejectionReason());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(orders);
+
+
     }
 }
