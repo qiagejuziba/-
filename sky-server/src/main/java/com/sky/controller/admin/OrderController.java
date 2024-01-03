@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 
@@ -26,52 +27,56 @@ public class OrderController {
 
     /**
      * 订单搜索
+     *
      * @param ordersPageQueryDTO
      * @return
      */
     @ApiOperation("订单搜索")
     @GetMapping("/conditionSearch")
-    public Result<PageResult> conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO){
-        log.info("订单搜索：{}",ordersPageQueryDTO);
-        PageResult pageResult =  orderService.conditionSearch(ordersPageQueryDTO);
+    public Result<PageResult> conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        log.info("订单搜索：{}", ordersPageQueryDTO);
+        PageResult pageResult = orderService.conditionSearch(ordersPageQueryDTO);
         return Result.success(pageResult);
     }
 
     /**
      * 各个订单状态数量统计
+     *
      * @return
      */
     @ApiOperation("各个状态订单数量统计")
     @GetMapping("/statistics")
-    public Result<OrderStatisticsVO> statistics(){
+    public Result<OrderStatisticsVO> statistics() {
         log.info("各个状态订单数量统计:");
-        OrderStatisticsVO orderStatisticsVO =  orderService.statistics();
+        OrderStatisticsVO orderStatisticsVO = orderService.statistics();
         return Result.success(orderStatisticsVO);
     }
 
 
     /**
      * 查询订单详情
+     *
      * @param id
      * @return
      */
     @ApiOperation("查询订单详情")
     @GetMapping("/details/{id}")
-    public Result<OrderVO> details(@PathVariable("id") Long id){
-        log.info("查询订单详情:{}",id);
+    public Result<OrderVO> details(@PathVariable("id") Long id) {
+        log.info("查询订单详情:{}", id);
         OrderVO orderVO = orderService.details(id);
         return Result.success(orderVO);
     }
 
     /**
      * 接单
+     *
      * @param ordersConfirmDTO
      * @return
      */
     @ApiOperation("接单")
     @PutMapping("/confirm")
-    public Result<String> confirm(@RequestBody OrdersConfirmDTO ordersConfirmDTO){
-        log.info("接单:{}",ordersConfirmDTO);
+    public Result<String> confirm(@RequestBody OrdersConfirmDTO ordersConfirmDTO) {
+        log.info("接单:{}", ordersConfirmDTO);
         //商家接单其实就是将订单的状态修改为“已接单”
         orderService.confirm(ordersConfirmDTO);
         return Result.success();
@@ -79,14 +84,29 @@ public class OrderController {
 
     /**
      * 拒单
+     *
      * @param ordersRejectionDTO
      * @return
      */
     @ApiOperation("拒单")
     @PutMapping("/rejection")
-    public Result<String> rejection(@RequestBody OrdersRejectionDTO ordersRejectionDTO){
-        log.info("拒单:{}",ordersRejectionDTO);
+    public Result<String> rejection(@RequestBody OrdersRejectionDTO ordersRejectionDTO) {
+        log.info("拒单:{}", ordersRejectionDTO);
         orderService.rejection(ordersRejectionDTO);
+        return Result.success();
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param ordersCancelDTO
+     * @return
+     */
+    @ApiOperation("取消订单")
+    @PutMapping("/cancel")
+    public Result<String> cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) {
+        log.info("取消订单：{}",ordersCancelDTO);
+        orderService.adminCancel(ordersCancelDTO);
         return Result.success();
     }
 

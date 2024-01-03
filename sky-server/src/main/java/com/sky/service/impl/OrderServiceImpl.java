@@ -487,4 +487,32 @@ public class OrderServiceImpl implements OrderService {
 
 
     }
+
+    /**
+     * 商家取消订单
+     *
+     * @param ordersCancelDTO
+     */
+    @Override
+    public void adminCancel(OrdersCancelDTO ordersCancelDTO) {
+        //业务规则：
+        //- 取消订单其实就是将订单状态修改为“已取消”
+        //- 商家取消订单时需要指定取消原因
+        //- 商家取消订单时，如果用户已经完成了支付，需要为用户退款
+
+        //获取订单
+        Orders ordersDB = orderMapper.getById(ordersCancelDTO.getId());
+        //判断用户是否已经支付
+        if (ordersDB.getPayStatus().equals(Orders.PAID)) {
+
+            //个人商户微信小程序无法使用支付功能，所以直接逻辑修改为退款
+        }
+        // 管理端取消订单需要退款，根据订单id更新订单状态、取消原因、取消时间
+        Orders orders = new Orders();
+        orders.setId(ordersCancelDTO.getId());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelReason(ordersCancelDTO.getCancelReason());
+        orders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(orders);
+    }
 }
