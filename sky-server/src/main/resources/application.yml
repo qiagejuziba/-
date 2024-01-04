@@ -55,5 +55,8 @@ sky:
   wechat:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}
+  # 商家门店地址
+  shop:
+    address: 河北省张家口市桥东区朝阳西大街13号河北建筑工程学院
 
 
