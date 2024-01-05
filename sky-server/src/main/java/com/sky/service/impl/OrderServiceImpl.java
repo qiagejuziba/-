@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -20,6 +21,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -30,7 +32,9 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +54,8 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
     //设置全局变量，跳过微信支付的订单号
     //public String orderNumber;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下订单
@@ -196,6 +202,16 @@ public class OrderServiceImpl implements OrderService {
         // 支付成功后返回首页需要清空购物车
         shoppingCartMapper.delete(order.getUserId());
 
+
+        //通过websocket向客户端浏览器推送数据 type 、 orderId、content
+        Map map = new HashMap();
+        map.put("type",1); //1 代表新订单  2 代表用户催单
+        map.put("orderId",orderMapper.getByNumber(orderNumber).getId()); //获取订单id
+        map.put("content","订单号：" + orderNumber);
+        //转JSON对象
+        String json = JSON.toJSONString(map);
+        //发送数据
+        webSocketServer.sendToAllClient(json);
     }
 
 
@@ -562,4 +578,6 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(orders);
     }
+
+
 }
