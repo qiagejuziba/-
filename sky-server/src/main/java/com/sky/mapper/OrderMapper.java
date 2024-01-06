@@ -86,9 +86,16 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrderTimeoutLT(Integer status,LocalDateTime orderTime);
 
     /**
-     * 指定区间统计营业额数据
+     * 统计指定区间营业额数据
      * @param map
      * @return
      */
     Double sumByMap(Map map);
+
+    /**
+     * 统计指定区间内订单数据
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
