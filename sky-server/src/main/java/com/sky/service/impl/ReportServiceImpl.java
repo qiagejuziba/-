@@ -2,8 +2,10 @@ package com.sky.service.impl;
 
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 统计指定区间内的营业额数据
@@ -70,6 +74,58 @@ public class ReportServiceImpl implements ReportService {
         return TurnoverReportVO.builder()
                 .dateList(StringUtils.join(dateList, ",")) //每一天
                 .turnoverList(org.apache.commons.lang3.StringUtils.join(turnoverList)) //每一天营业额
+                .build();
+    }
+
+    /**
+     * 统计指定区间内的用户数据
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
+        //先拿到指定区间内的每一天的时间
+        //使用集合来封装每一天
+        List<LocalDate> dateList = new ArrayList<>();
+
+        dateList.add(begin);
+        while (!begin.equals(end)) {
+            //当开始时间等于结束时间的时候就停止循环
+            begin = begin.plusDays(1); //开始日期加1天
+            dateList.add(begin); //把每一天添加进集合中
+        }
+
+        //存放统计每天的新增用户数量  select count(id) from user where create_time < ? and create_time > ?
+        List<Integer> newUserList = new ArrayList<>();
+        //存放统计指定区间的总用户数量  select count(id) from user where create_time < ?
+        List<Integer> totalUserList = new ArrayList<>();
+
+        for (LocalDate date : dateList) {
+            //获取每一天的最大最小时间
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+
+            Map map = new HashMap();
+            //先统计总用户，利用动态SQL，一条查询语句可以复用，
+            map.put("end", endTime);
+            Integer totalUser = userMapper.countByMap(map);
+            totalUser = totalUser == null ? 0 : totalUser; //非空判断，如果为空则吧null变为0，用于前端展示数据
+            //再统计新增用户
+            map.put("begin", beginTime);
+            Integer newUser = userMapper.countByMap(map);
+            newUser = newUser == null ? 0 : newUser; //非空判断，如果为空则吧null变为0，用于前端展示数据
+            //放入集合中
+            totalUserList.add(totalUser);
+            newUserList.add(newUser);
+
+        }
+        //创建UserReportVO并返回
+        return UserReportVO.builder()
+                .dateList(StringUtils.join(dateList,","))
+                .newUserList(StringUtils.join(newUserList,","))
+                .totalUserList(StringUtils.join(totalUserList,","))
                 .build();
     }
 }
