@@ -9,6 +9,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
@@ -155,6 +156,37 @@ public class EmployeeServiceImpl implements EmployeeService {
         //employee.setUpdateTime(LocalDateTime.now());
         //mployee.setUpdateUser(BaseContext.getCurrentId());
 
+        employeeMapper.update(employee);
+
+    }
+
+    /**
+     * 修改密码 2024年1月7日22:27:06 -- 在完成所有接口后发现遗漏的修改密码功能
+     * @param passwordEditDTO
+     */
+    @Override
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+        //获取当前登录用户的id
+        Long empId = BaseContext.getCurrentId();
+        //根据id查询数据库，校验原始密码是否正确，不正确则抛出异常
+        Employee employeeDB = employeeMapper.getById(empId);
+        //正确密码
+        String correctPassword = employeeDB.getPassword();
+        //传过来的原始密码
+        String oldPassword = passwordEditDTO.getOldPassword();
+        //数据库中的密码是进行过MD5加密处理，所以先把传过来的原始密码进行md5加密
+        String md5OldPassword = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+        //密码比对
+        if (!correctPassword.equals(md5OldPassword)){
+            throw new PasswordErrorException("原密码错误！");
+        }
+        //如果输入的原密码与数据库密码相同，则进行修改，把newPassword进行MD5加密存入数据库，密码修改成功
+        Employee employee = Employee.builder()
+                .password(DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes()))
+                .id(empId)
+                .updateTime(LocalDateTime.now())
+                .updateUser(BaseContext.getCurrentId())
+                .build();
         employeeMapper.update(employee);
 
     }
