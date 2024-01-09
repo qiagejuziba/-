@@ -22,7 +22,8 @@
 1. 安装 Java JDK 11 并配置环境变量
 2. 安装 MySQL、Redis 数据库并创建相应数据库，在提供的资料文件中有数据库脚本，运行 sky.sql。
 3. 安装Maven构建工具
-4. 下载安装 Nginx，打开资料中的前端运行环境，可以找到Nginx的配置文件，Nginx配置文件相对路径（/conf/nginx.conf），Nginx文件不要放在有中文目录的文件中。如果点击nginx.exe出现闪一下，并且任务管理器中没有nginx进程的情况，大概率是Nginx的端口号80被其他应用程序占用了。可以选择杀死占用80端口的其他进程，或者修改nginx的端口号，参考这2篇文章解决问题：1、 [下载安装Nginx以及会遇到的问题详解](https://blog.csdn.net/cxy_ydj/article/details/122866499?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170476952216800213042819%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=170476952216800213042819&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-122866499-null-null.142^v99^pc_search_result_base7&utm_term=nginx%E7%AB%AF%E5%8F%A3%E5%8F%B7%E8%A2%AB%E5%8D%A0%E7%94%A8&spm=1018.2226.3001.4187)
+1. 下载nodejs
+5. 下载安装 Nginx，打开资料中的前端运行环境，可以找到Nginx的配置文件，Nginx配置文件相对路径（/conf/nginx.conf），Nginx文件不要放在有中文目录的文件中。如果点击nginx.exe出现闪一下，并且任务管理器中没有nginx进程的情况，大概率是Nginx的端口号80被其他应用程序占用了。可以选择杀死占用80端口的其他进程，或者修改nginx的端口号，参考这2篇文章解决问题：1、 [下载安装Nginx以及会遇到的问题详解](https://blog.csdn.net/cxy_ydj/article/details/122866499?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170476952216800213042819%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=170476952216800213042819&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-122866499-null-null.142^v99^pc_search_result_base7&utm_term=nginx%E7%AB%AF%E5%8F%A3%E5%8F%B7%E8%A2%AB%E5%8D%A0%E7%94%A8&spm=1018.2226.3001.4187)
 ，2、 [80端口号被System进程占用解决办法](https://www.cnblogs.com/xwgcxk/p/11819018.html)
 
 
@@ -127,7 +128,7 @@ sky:
 2.  - 项目用户端需要自己去微信小程序官方申请，需要按规则填写两项信息。![需要填写的两项信息](https://foruda.gitee.com/images/1704770234690370899/d1729420_12656867.png "屏幕截图") 
 - 在开发管理中获取AppId和密钥，![输入图片说明](https://foruda.gitee.com/images/1704771236069651885/3603e50b_12656867.png "屏幕截图")
 - 下载微信开发者工具，导入资料中提供的微信小程序代码（mp-weixin）。
-3.  在redis安装目录下打开命令行窗口，输入：![输入图片说明](https://foruda.gitee.com/images/1704771851238671981/ec5463c7_12656867.png "屏幕截图"),出现![输入图片说明](https://foruda.gitee.com/images/1704771901221137687/75d3d5b7_12656867.png "屏幕截图")就代表运行成功了，不要关闭该窗口，redis是基于内存的key-value结构数据库，基于内存存储，读写性能高。
+3.  在redis安装目录下打开命令行窗口，输入：![输入图片说明](https://foruda.gitee.com/images/1704771851238671981/ec5463c7_12656867.png "屏幕截图"),出现![输入图片说明](https://foruda.gitee.com/images/1704771901221137687/75d3d5b7_12656867.png "屏幕截图")就代表运行成功了，不要关闭该窗口，redis是基于内存的key-value结构数据库，基于内存存储，读写性能高。“Another-Redis-Desktop-Manager”是一款redis数据库可视化软件，可以安装软件可视化redis。
 4. 运行项目。
 
 
