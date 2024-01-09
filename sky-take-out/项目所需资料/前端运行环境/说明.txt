@@ -1,0 +1,1 @@
+直接使用nginx-CangQiongWaiMai，删除另一个。
