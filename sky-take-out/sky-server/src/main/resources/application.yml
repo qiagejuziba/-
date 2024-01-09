@@ -59,8 +59,8 @@ sky:
     refund-notify-url: ${sky.wechat.refund-notify-url}
   # 商家门店地址
   shop:
-    address: 河北省张家口市桥东区朝阳西大街13号河北建筑工程学院
+    address: #自己填写商家地址
   baidu:
-    ak: O1KMISz8un1U0zYrWMaoVZfgzTElw9PL
+    ak: #自己获取百度ak
 
 
