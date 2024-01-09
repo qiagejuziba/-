@@ -129,6 +129,7 @@ sky:
 - 在开发管理中获取AppId和密钥，![输入图片说明](https://foruda.gitee.com/images/1704771236069651885/3603e50b_12656867.png "屏幕截图")
 - 下载微信开发者工具，导入资料中提供的微信小程序代码（mp-weixin）。
 3.  在redis安装目录下打开命令行窗口，输入：![输入图片说明](https://foruda.gitee.com/images/1704771851238671981/ec5463c7_12656867.png "屏幕截图"),出现![输入图片说明](https://foruda.gitee.com/images/1704771901221137687/75d3d5b7_12656867.png "屏幕截图")就代表运行成功了，不要关闭该窗口，redis是基于内存的key-value结构数据库，基于内存存储，读写性能高。“Another-Redis-Desktop-Manager”是一款redis数据库可视化软件，可以安装软件可视化redis。
+1. 注册阿里云账号，获取endpoint，access-key-id，access-key-secret，bucket-name。不懂参考教程：[阿里云OSS云存储使用教程](https://blog.csdn.net/weixin_48701521/article/details/132026512?ops_request_misc=&request_id=&biz_id=102&utm_term=%E9%98%BF%E9%87%8C%E4%BA%91%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-132026512.nonecase&spm=1018.2226.3001.4187)
 4. 运行项目。
 
 
