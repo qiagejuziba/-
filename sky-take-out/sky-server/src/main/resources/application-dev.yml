@@ -7,10 +7,10 @@ sky:
     username: root
     password: 123456
   alioss:
-    endpoint: oss-cn-beijing.aliyuncs.com
-    access-key-id: LTAI5tGzzZXBqKgX9icZiSzR
-    access-key-secret: sbScjZLUGW11XoiVlrduNqqNNfKX9r
-    bucket-name: sky-zhairuihao
+    endpoint: 
+    access-key-id: 
+    access-key-secret: 
+    bucket-name: 
   redis:
     host: localhost
     port: 6379
@@ -18,7 +18,5 @@ sky:
     database: 10
 
   wechat:
-    appid: wx4b3d2423773fc179
-    secret: e76affd5fd752aca13f3153fd510e3b2
-    notify-url: http://374aa2e0.r3.cpolar.top/paySuccess
-    refund-notify-url: https://374aa2e0.r3.cpolar.top/refundSuccess
+    appid: 
+    secret: 
